@@ -8,7 +8,9 @@ function App() {
 
   const [signatures, setSignatures] = useState([])
   const [showAddSignaturePopup, setShowAddSignaturePopup] = useState(false)
-  
+  // Make the path into an environment variable
+  const [path, updatePath] = useState('http://localhost:5000/signatures')
+
   useEffect(() => {
     const getSignatures = async () => {
       const signaturesFromServer = await fetchSignatures()
@@ -21,7 +23,7 @@ function App() {
 
   // Fetch Signatures from Server
   const fetchSignatures = async () => {
-    const res = await fetch('http://localhost:5000/signatures')
+    const res = await fetch(path)
     const data = await res.json()
     return data
   }
@@ -34,7 +36,8 @@ function App() {
   // Delete Signature from Server
   const deleteSignature = async (id) => {
     console.log('Deleted')
-    await fetch(`http://localhost:5000/signatures/${id}`, {
+    console.log(path + "/" + id)
+    await fetch(path + "/" + id, {
       method: 'DELETE',
     })
     setSignatures(signatures.filter((signature) => signature.id !== id))
